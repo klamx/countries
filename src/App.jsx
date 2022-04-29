@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import Countries from './Components/Countries.jsx'
+import Country from './Components/Country'
 
 function App () {
   const [countries, setcountries] = useState([])
@@ -11,8 +13,8 @@ function App () {
   }
 
   const handleShowCountry = (e) => {
-    console.log(e.target.value)
-    setSearchCountry(e.target.value)
+    const country = e.target.value
+    setSearchCountry(country)
   }
 
   useEffect(() => {
@@ -24,10 +26,13 @@ function App () {
       )
       return response
     }
-    getCountriesData().then(({ data }) => {
-      // console.log('render')
-      setcountries(data)
-    })
+    getCountriesData()
+      .then(({ data }) => {
+        setcountries(data)
+      })
+      .catch((e) =>
+        console.log(`%c${e.message}`, 'color: orange; font-size: 14px')
+      )
   }, [searchCountry])
 
   return (
@@ -44,38 +49,13 @@ function App () {
       {countries.length > 10 && (
         <div>Too many matches, specify another filter</div>
       )}
-      {countries.length <= 10 && (
-        <div style={{ marginTop: '1rem' }}>
-          {countries.map((country) => {
-            return (
-              <div key={country.name}>
-                <span>{country.name}</span>{' '}
-                <button onClick={handleShowCountry} value={country.name}>
-                  show
-                </button>
-              </div>
-            )
-          })}
-        </div>
+      {countries.length <= 10 && countries.length > 1 && (
+        <Countries
+          countries={countries}
+          handleShowCountry={handleShowCountry}
+        ></Countries>
       )}
-      {countries.length === 1 && (
-        <div style={{ marginTop: '1rem' }}>
-          <h2>{countries[0].name}</h2>
-          <p>capital: {countries[0].capital}</p>
-          <p>population: {countries[0].population}</p>
-          <h3>languajes</h3>
-          <ul>
-            {countries[0].languages.map((lan) => {
-              return <li key={countries[0].name + lan.name}>{lan.name}</li>
-            })}
-          </ul>
-          <img
-            src={countries[0].flag}
-            alt={countries[0].name}
-            style={{ width: '130px' }}
-          />
-        </div>
-      )}
+      {countries.length === 1 && <Country countrie={countries[0]}></Country>}
     </div>
   )
 }
