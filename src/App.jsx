@@ -10,6 +10,11 @@ function App () {
     setSearchCountry(country)
   }
 
+  const handleShowCountry = (e) => {
+    console.log(e.target.value)
+    setSearchCountry(e.target.value)
+  }
+
   useEffect(() => {
     if (searchCountry === '') return
 
@@ -20,7 +25,7 @@ function App () {
       return response
     }
     getCountriesData().then(({ data }) => {
-      console.log('render')
+      // console.log('render')
       setcountries(data)
     })
   }, [searchCountry])
@@ -41,10 +46,13 @@ function App () {
       )}
       {countries.length <= 10 && (
         <div style={{ marginTop: '1rem' }}>
-          {countries.map((contry) => {
+          {countries.map((country) => {
             return (
-              <div key={contry.name}>
-                <span>{contry.name}</span>
+              <div key={country.name}>
+                <span>{country.name}</span>{' '}
+                <button onClick={handleShowCountry} value={country.name}>
+                  show
+                </button>
               </div>
             )
           })}
