@@ -53,9 +53,9 @@ function App () {
         <Countries
           countries={countries}
           handleShowCountry={handleShowCountry}
-        ></Countries>
+        />
       )}
-      {countries.length === 1 && <Country countrie={countries[0]}></Country>}
+      {countries.length === 1 && <Country countrie={countries[0]} />}
     </div>
   )
 }
